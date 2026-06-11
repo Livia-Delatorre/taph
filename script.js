@@ -363,3 +363,62 @@ if ('ontouchstart' in window) {
 }
 
 console.log('Drone interativo carregado com sucesso! 🚁');
+
+// Drone 3-D tilt on mouse move
+  const drone = document.getElementById('droneContainer');
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    const rx = (e.clientY - cy) / cy * -8;
+    const ry = (e.clientX - cx) / cx *  8;
+    drone.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+  document.addEventListener('mouseleave', () => {
+    drone.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+  });
+
+  // ==================== SCROLL DOWN FUNCTION ====================
+const scrollIndicator = document.querySelector('.scroll-indicator');
+
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', function() {
+        window.scrollBy({
+            top: 100,  // Quantidade de pixels para rolar
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Alternativa: rolar para o próximo elemento (se existir)
+// Se você tiver uma próxima seção (ex: <section id="about">), use isso:
+
+const scrollIndicator = document.querySelector('.scroll-indicator');
+
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', function() {
+        const nextSection = document.querySelector('#sobre'); // ID da próxima seção
+        if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+}
+
+// Scroll down com suporte a clique e toque
+const scrollIndicator = document.querySelector('.scroll-indicator');
+
+function handleScrollDown(e) {
+    e.preventDefault();
+    
+    const windowHeight = window.innerHeight;
+    const currentScroll = window.pageYOffset;
+    const nextPosition = currentScroll + windowHeight;
+    
+    window.scrollTo({
+        top: nextPosition,
+        behavior: 'smooth'
+    });
+}
+
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', handleScrollDown);
+    scrollIndicator.addEventListener('touchstart', handleScrollDown);
+}
