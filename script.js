@@ -32,44 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ==================== DRONE INTERATIVO 3D ====================
-const droneContainer = document.getElementById('droneContainer');
-let mouseX = 0;
-let mouseY = 0;
-let currentX = 0;
-let currentY = 0;
-
-if (droneContainer) {
-    // Seguir mouse com tilt 3D
-    document.addEventListener('mousemove', (e) => {
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-        const rx = (e.clientY - cy) / cy * -8;
-        const ry = (e.clientX - cx) / cx * 8;
-        droneContainer.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-    });
-    
-    document.addEventListener('mouseleave', () => {
-        droneContainer.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
-    });
-    
-    // Hover effects - intensify wing flutter
-    droneContainer.addEventListener('mouseenter', () => {
-        const wings = document.querySelectorAll('.wing');
-        wings.forEach(wing => {
-            wing.style.animationDuration = '0.4s';
-        });
-        droneContainer.style.filter = 'brightness(1.15)';
-    });
-    
-    droneContainer.addEventListener('mouseleave', () => {
-        const wings = document.querySelectorAll('.wing');
-        wings.forEach(wing => {
-            wing.style.animationDuration = '0.6s';
-        });
-        droneContainer.style.filter = 'brightness(1)';
-    });
-}
 
 // ==================== PARALLAX NAS FORMAS ====================
 document.addEventListener('mousemove', (e) => {

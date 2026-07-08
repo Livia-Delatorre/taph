@@ -51,96 +51,9 @@
           <div class="ring ring-3"></div>
         </div>
 
-        <div class="drone-container" id="droneContainer">
-          <svg class="drone-svg" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <!-- Gradients -->
-              <linearGradient id="headGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#1e90ff"/>
-                <stop offset="50%" stop-color="#0066cc"/>
-                <stop offset="100%" stop-color="#004499"/>
-              </linearGradient>
-              <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#00a8ff"/>
-                <stop offset="100%" stop-color="#0066cc"/>
-              </linearGradient>
-              <linearGradient id="wingGrad" x1="0%" y1="50%" x2="100%" y2="50%">
-                <stop offset="0%" stop-color="#ff8c00"/>
-                <stop offset="50%" stop-color="#ff6b35"/>
-                <stop offset="100%" stop-color="#ff5722"/>
-              </linearGradient>
-              <linearGradient id="tailGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#1e90ff"/>
-                <stop offset="100%" stop-color="#0047ab"/>
-              </linearGradient>
-              <!-- Shadow filter -->
-              <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.4"/>
-              </filter>
-              <!-- Glow -->
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-
-            <!-- LEFT WING -->
-            <ellipse cx="55" cy="100" rx="45" ry="35" fill="url(#wingGrad)" opacity="0.9" filter="url(#shadow)" class="wing left-wing"/>
-            <path d="M 55,70 Q 30,75 20,100 Q 30,120 55,130" fill="url(#wingGrad)" opacity="0.95" class="wing left-wing"/>
-
-            <!-- RIGHT WING -->
-            <ellipse cx="145" cy="100" rx="45" ry="35" fill="url(#wingGrad)" opacity="0.9" filter="url(#shadow)" class="wing right-wing"/>
-            <path d="M 145,70 Q 170,75 180,100 Q 170,120 145,130" fill="url(#wingGrad)" opacity="0.95" class="wing right-wing"/>
-
-            <!-- BODY -->
-            <ellipse cx="100" cy="130" rx="38" ry="55" fill="url(#bodyGrad)" filter="url(#shadow)"/>
-            
-            <!-- CHEST WHITE -->
-            <ellipse cx="100" cy="140" rx="22" ry="35" fill="rgba(255,255,255,0.2)"/>
-            
-            <!-- TAIL FEATHERS -->
-            <ellipse cx="100" cy="200" rx="32" ry="40" fill="url(#tailGrad)" filter="url(#shadow)" class="tail"/>
-            <path d="M 75,195 Q 60,220 65,250" stroke="url(#tailGrad)" stroke-width="8" fill="none" stroke-linecap="round" class="tail-feather"/>
-            <path d="M 100,205 Q 95,235 100,265" stroke="url(#tailGrad)" stroke-width="8" fill="none" stroke-linecap="round" class="tail-feather"/>
-            <path d="M 125,195 Q 140,220 135,250" stroke="url(#tailGrad)" stroke-width="8" fill="none" stroke-linecap="round" class="tail-feather"/>
-
-            <!-- HEAD -->
-            <circle cx="100" cy="65" r="28" fill="url(#headGrad)" filter="url(#shadow)"/>
-            
-            <!-- CREST (top of head) -->
-            <path d="M 85,42 Q 90,25 100,20 Q 110,25 115,42" fill="#004499" opacity="0.8"/>
-            
-            <!-- BEAK (long and pointed) -->
-            <path d="M 118,65 L 165,60 L 168,65 L 165,70 Z" fill="#ff8c00" filter="url(#shadow)"/>
-            <path d="M 165,60 L 175,58 L 175,72 L 165,70 Z" fill="#ff6b35"/>
-            
-            <!-- EYE -->
-            <circle cx="95" cy="58" r="6" fill="white"/>
-            <circle cx="95" cy="58" r="4" fill="#000"/>
-            <circle cx="96" cy="56" r="1.5" fill="white"/>
-            
-            <!-- CHEEK PATCH (white) -->
-            <ellipse cx="108" cy="68" rx="8" ry="6" fill="rgba(255,255,255,0.3)"/>
-            
-            <!-- FEET -->
-            <g class="feet">
-              <line x1="85" y1="182" x2="80" y2="205" stroke="#666" stroke-width="2" stroke-linecap="round"/>
-              <line x1="115" y1="182" x2="120" y2="205" stroke="#666" stroke-width="2" stroke-linecap="round"/>
-              <!-- Toes -->
-              <line x1="80" y1="205" x2="72" y2="210" stroke="#666" stroke-width="1.5"/>
-              <line x1="80" y1="205" x2="80" y2="212" stroke="#666" stroke-width="1.5"/>
-              <line x1="80" y1="205" x2="88" y2="210" stroke="#666" stroke-width="1.5"/>
-              <line x1="120" y1="205" x2="128" y2="210" stroke="#666" stroke-width="1.5"/>
-              <line x1="120" y1="205" x2="120" y2="212" stroke="#666" stroke-width="1.5"/>
-              <line x1="120" y1="205" x2="112" y2="210" stroke="#666" stroke-width="1.5"/>
-            </g>
 
             <!-- GLOW AURA -->
-            <circle cx="100" cy="130" r="65" fill="none" stroke="#ff9d3d" stroke-width="1" opacity="0.3" class="aura"/>
-          </svg>
+            
         </div>
       </div>
     </div>
