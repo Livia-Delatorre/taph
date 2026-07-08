@@ -1,268 +1,157 @@
-// Configuração das partículas de fundo
+// ==================== PARTÍCULAS DE FUNDO ====================
 document.addEventListener('DOMContentLoaded', function() {
-    // Criar partículas manualmente (já que o particles.js pode não estar funcionando)
     const particlesContainer = document.querySelector('.particles-container');
     
     function createParticle() {
         const particle = document.createElement('div');
         particle.classList.add('particle');
         
-        // Tamanho aleatório entre 2px e 6px
         const size = Math.random() * 4 + 2;
         particle.style.width = size + 'px';
         particle.style.height = size + 'px';
         
-        // Posição aleatória
         particle.style.left = Math.random() * 100 + '%';
         particle.style.top = Math.random() * 100 + '%';
         
-        // Duração da animação aleatória
         const duration = Math.random() * 4 + 3;
-        particle.style.animation = `float ${duration}s ease-in-out infinite`;
+        particle.style.animation = `floatParticle ${duration}s ease-in-out infinite`;
         particle.style.animationDelay = Math.random() * 5 + 's';
         
-        // Opacidade aleatória
         particle.style.opacity = Math.random() * 0.5 + 0.2;
         
         particlesContainer.appendChild(particle);
         
-        // Remover e recriar partícula após um tempo para efeito contínuo
         setTimeout(() => {
             particle.remove();
             createParticle();
         }, 8000);
     }
     
-    // Criar 60 partículas iniciais
     for (let i = 0; i < 60; i++) {
         createParticle();
     }
 });
 
-// Drone interativo que segue o mouse
+// ==================== DRONE INTERATIVO 3D ====================
 const droneContainer = document.getElementById('droneContainer');
 let mouseX = 0;
 let mouseY = 0;
 let currentX = 0;
 let currentY = 0;
-let targetScale = 1;
-let currentScale = 1;
 
 if (droneContainer) {
+    // Seguir mouse com tilt 3D
     document.addEventListener('mousemove', (e) => {
-        // Calcula posição do mouse relativa ao centro da tela
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        
-        mouseX = (e.clientX - centerX) / 40;
-        mouseY = (e.clientY - centerY) / 40;
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight / 2;
+        const rx = (e.clientY - cy) / cy * -8;
+        const ry = (e.clientX - cx) / cx * 8;
+        droneContainer.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
     });
     
-    // Anima o drone suavemente seguindo o mouse
-    function animateDrone() {
-        // Suaviza o movimento
-        currentX += (mouseX - currentX) * 0.1;
-        currentY += (mouseY - currentY) * 0.1;
-        
-        // Aplica a transformação 3D
-        droneContainer.style.transform = `rotateY(${currentX}deg) rotateX(${-currentY}deg) translateZ(20px) scale(${currentScale})`;
-        
-        requestAnimationFrame(animateDrone);
-    }
+    document.addEventListener('mouseleave', () => {
+        droneContainer.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+    });
     
-    animateDrone();
-    
-    // Efeito de hover no drone
+    // Hover effects - intensify wing flutter
     droneContainer.addEventListener('mouseenter', () => {
-        targetScale = 1.05;
-        // Acelera as hélices ao passar o mouse
-        const propellers = document.querySelectorAll('.propeller');
-        propellers.forEach(prop => {
-            prop.style.animationDuration = '0.15s';
+        const wings = document.querySelectorAll('.wing');
+        wings.forEach(wing => {
+            wing.style.animationDuration = '0.4s';
         });
-        
-        // Intensifica o brilho dos LEDs
-        const leds = document.querySelectorAll('.led');
-        leds.forEach(led => {
-            led.style.animationDuration = '0.5s';
-        });
-        
-        // Efeito de escala suave
-        let scaleStep = 0;
-        function smoothScale() {
-            if (scaleStep < 1) {
-                scaleStep += 0.1;
-                currentScale = 1 + (scaleStep * 0.05);
-                setTimeout(smoothScale, 20);
-            }
-        }
-        smoothScale();
+        droneContainer.style.filter = 'brightness(1.15)';
     });
     
     droneContainer.addEventListener('mouseleave', () => {
-        targetScale = 1;
-        // Volta à velocidade normal das hélices
-        const propellers = document.querySelectorAll('.propeller');
-        propellers.forEach(prop => {
-            prop.style.animationDuration = '0.3s';
+        const wings = document.querySelectorAll('.wing');
+        wings.forEach(wing => {
+            wing.style.animationDuration = '0.6s';
         });
-        
-        // Normaliza o brilho dos LEDs
-        const leds = document.querySelectorAll('.led');
-        leds.forEach(led => {
-            led.style.animationDuration = '1.5s';
-        });
-        
-        // Volta à escala normal
-        let scaleStep = 1;
-        function smoothScaleBack() {
-            if (scaleStep > 0) {
-                scaleStep -= 0.1;
-                currentScale = 1 + (scaleStep * 0.05);
-                setTimeout(smoothScaleBack, 20);
-            }
-        }
-        smoothScaleBack();
-        
-        // Reseta a rotação do mouse
-        mouseX = 0;
-        mouseY = 0;
-    });
-    
-    // Efeito de clique no drone
-    droneContainer.addEventListener('click', () => {
-        droneContainer.style.animation = 'shake 0.5s ease-in-out';
-        
-        // Efeito de pulsar nas hélices
-        const propellers = document.querySelectorAll('.propeller');
-        propellers.forEach(prop => {
-            prop.style.animationDuration = '0.1s';
-            setTimeout(() => {
-                prop.style.animationDuration = '0.3s';
-            }, 500);
-        });
-        
-        setTimeout(() => {
-            droneContainer.style.animation = '';
-        }, 500);
+        droneContainer.style.filter = 'brightness(1)';
     });
 }
 
-// Animação de shake
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes shake {
-        0%, 100% { transform: rotateY(0deg) rotateX(0deg) translateZ(20px); }
-        25% { transform: rotateY(10deg) rotateX(5deg) translateZ(25px); }
-        75% { transform: rotateY(-10deg) rotateX(-5deg) translateZ(15px); }
-    }
+// ==================== PARALLAX NAS FORMAS ====================
+document.addEventListener('mousemove', (e) => {
+    const shapes = document.querySelectorAll('.shape');
+    const mouseXparallax = e.clientX / window.innerWidth;
+    const mouseYparallax = e.clientY / window.innerHeight;
     
-    @keyframes floatDrone {
-        0%, 100% {
-            transform: translateY(0px);
-        }
-        50% {
-            transform: translateY(-15px);
-        }
-    }
-    
-    @keyframes pulse {
-        0%, 100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-        50% {
-            transform: translate(-50%, -50%) scale(1.2);
-            opacity: 0.8;
-        }
-    }
-    
-    @keyframes glowPulse {
-        0%, 100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0.5;
-        }
-        50% {
-            transform: translate(-50%, -50%) scale(1.4);
-            opacity: 0.3;
-        }
-    }
-    
-    @keyframes ledBlink {
-        0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.3;
-            transform: scale(0.8);
-        }
-    }
-    
-    @keyframes rotorGlow {
-        0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-        }
-        50% {
-            opacity: 0.7;
-            transform: scale(1.15);
-        }
-    }
-    
-    .drone-container {
-        transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    
-    /* Efeito de hover nos botões com ripple */
-    .btn {
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .btn::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s, height 0.6s;
-    }
-    
-    .btn:hover::before {
-        width: 300px;
-        height: 300px;
-    }
-`;
-document.head.appendChild(style);
+    shapes.forEach((shape, index) => {
+        const speed = 0.02 * (index + 1);
+        const x = (mouseXparallax - 0.5) * 30 * speed;
+        const y = (mouseYparallax - 0.5) * 30 * speed;
+        shape.style.transform = `translate(${x}px, ${y}px)`;
+    });
+});
 
-// Botões interativos
-const historiaBtn = document.querySelector('.btn-primary');
-const saibaMaisBtn = document.querySelector('.btn-secondary');
+// ==================== SCROLL SMOOTH E NAVEGAÇÃO ====================
+// Botões "História" e "Saiba mais" do hero
+document.querySelectorAll('[data-scroll-to]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        const target = document.getElementById(btn.dataset.scrollTo);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
 
-if (historiaBtn) {
-    historiaBtn.addEventListener('click', (e) => {
-        criarRipple(e, historiaBtn);
-        console.log('História clicada');
-        // Adicione sua ação aqui
-        alert('Em breve: Nossa história!');
+// Scroll indicator
+const scrollIndicator = document.querySelector('.scroll-indicator');
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', function() {
+        const nextSection = document.querySelector('#sobre');
+        if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
     });
 }
 
-if (saibaMaisBtn) {
-    saibaMaisBtn.addEventListener('click', (e) => {
-        criarRipple(e, saibaMaisBtn);
-        console.log('Saiba mais clicado');
-        // Adicione sua ação aqui
-        alert('Em breve: Mais informações!');
-    });
+// ==================== SCROLL REVEAL & ANIMATIONS ====================
+// Animar contadores de stats
+function animateCount(el) {
+    const target = parseInt(el.dataset.count, 10) || 0;
+    const start = 0;
+    const duration = 1200;
+    let startTime = null;
+
+    function step(ts) {
+        if (!startTime) startTime = ts;
+        const progress = Math.min((ts - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(start + (target - start) * eased);
+        if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
 }
 
-// Função para criar efeito ripple nos botões
+// Observer para seções (Sobre, História)
+const sections = document.querySelectorAll('.reveal-section');
+const sectionObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            // Animar stats quando a seção entra na viewport
+            entry.target.querySelectorAll('.stat-number').forEach(animateCount);
+            sectionObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.25 });
+
+sections.forEach(function (s) { sectionObserver.observe(s); });
+
+// Observer para timeline items
+const timelineItems = document.querySelectorAll('.timeline-item');
+const itemObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            itemObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.3 });
+
+timelineItems.forEach(function (item) { itemObserver.observe(item); });
+
+// ==================== EFEITO RIPPLE NOS BOTÕES ====================
 function criarRipple(event, element) {
     const ripple = document.createElement('span');
     ripple.classList.add('ripple-effect');
@@ -292,7 +181,7 @@ function criarRipple(event, element) {
     }, 600);
 }
 
-// Adicionar animação ripple ao CSS
+// Adicionar animação ripple ao CSS dinamicamente
 const rippleStyle = document.createElement('style');
 rippleStyle.textContent = `
     @keyframes ripple {
@@ -304,121 +193,5 @@ rippleStyle.textContent = `
 `;
 document.head.appendChild(rippleStyle);
 
-// Efeito de rotação nas hélices com variação de velocidade
-let rotationSpeed = 0.3;
-setInterval(() => {
-    const propellers = document.querySelectorAll('.propeller');
-    // Pequena variação aleatória na velocidade para efeito mais realista
-    const variation = Math.random() * 0.05 + 0.28;
-    propellers.forEach(prop => {
-        prop.style.animationDuration = variation + 's';
-    });
-}, 3000);
-
-// Efeito de brilho nos LEDs
-const leds = document.querySelectorAll('.led');
-setInterval(() => {
-    leds.forEach(led => {
-        const randomIntensity = Math.random() * 0.5 + 0.5;
-        led.style.boxShadow = `0 0 ${10 + Math.random() * 10}px ${led.style.backgroundColor || '#00ff00'}`;
-    });
-}, 500);
-
-// Scroll suave para o indicador
-const scrollIndicator = document.querySelector('.scroll-indicator');
-if (scrollIndicator) {
-    scrollIndicator.addEventListener('click', () => {
-        window.scrollTo({
-            top: window.innerHeight,
-            behavior: 'smooth'
-        });
-    });
-}
-
-// Adicionar efeito de paralax ao fundo
-document.addEventListener('mousemove', (e) => {
-    const shapes = document.querySelectorAll('.shape');
-    const mouseXparallax = e.clientX / window.innerWidth;
-    const mouseYparallax = e.clientY / window.innerHeight;
-    
-    shapes.forEach((shape, index) => {
-        const speed = 0.02 * (index + 1);
-        const x = (mouseXparallax - 0.5) * 30 * speed;
-        const y = (mouseYparallax - 0.5) * 30 * speed;
-        shape.style.transform = `translate(${x}px, ${y}px)`;
-    });
-});
-
-// Prevenir que o drone saia da tela em dispositivos móveis
-if ('ontouchstart' in window) {
-    droneContainer.addEventListener('touchmove', (e) => {
-        e.preventDefault();
-        const touch = e.touches[0];
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        
-        mouseX = (touch.clientX - centerX) / 40;
-        mouseY = (touch.clientY - centerY) / 40;
-    });
-}
-
-console.log('Drone interativo carregado com sucesso! 🚁');
-
-// Drone 3-D tilt on mouse move
-  const drone = document.getElementById('droneContainer');
-  document.addEventListener('mousemove', e => {
-    const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
-    const rx = (e.clientY - cy) / cy * -8;
-    const ry = (e.clientX - cx) / cx *  8;
-    drone.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-  });
-  document.addEventListener('mouseleave', () => {
-    drone.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
-  });
-
-  // ==================== SCROLL DOWN FUNCTION ====================
-const scrollIndicator = document.querySelector('.scroll-indicator');
-
-if (scrollIndicator) {
-    scrollIndicator.addEventListener('click', function() {
-        window.scrollBy({
-            top: 100,  // Quantidade de pixels para rolar
-            behavior: 'smooth'
-        });
-    });
-}
-
-// Alternativa: rolar para o próximo elemento (se existir)
-// Se você tiver uma próxima seção (ex: <section id="about">), use isso:
-
-const scrollIndicator = document.querySelector('.scroll-indicator');
-
-if (scrollIndicator) {
-    scrollIndicator.addEventListener('click', function() {
-        const nextSection = document.querySelector('#sobre'); // ID da próxima seção
-        if (nextSection) {
-            nextSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-}
-
-// Scroll down com suporte a clique e toque
-const scrollIndicator = document.querySelector('.scroll-indicator');
-
-function handleScrollDown(e) {
-    e.preventDefault();
-    
-    const windowHeight = window.innerHeight;
-    const currentScroll = window.pageYOffset;
-    const nextPosition = currentScroll + windowHeight;
-    
-    window.scrollTo({
-        top: nextPosition,
-        behavior: 'smooth'
-    });
-}
-
-if (scrollIndicator) {
-    scrollIndicator.addEventListener('click', handleScrollDown);
-    scrollIndicator.addEventListener('touchstart', handleScrollDown);
-}
+// ==================== LOG ====================
+console.log('✈️ Taphros Drone Systems - Site carregado com sucesso!');
